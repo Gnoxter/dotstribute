@@ -7,7 +7,7 @@ def main():
     parser.add_option("-d", "--dotexe", dest = "dot_exclude",
             help = "Exclude files, given by .dotexclude file")
     parser.add_option("-f", "--force", dest = "force", default = False,
-            action = "store_true", help = "Force override the previous links")
+            action = "store_true", help = "Force overwrite the previous links")
 
     (options, args) = parser.parse_args()
 
@@ -21,15 +21,21 @@ def main():
     if os.path.exists(dotexclude):
         with open(dotexclude) as f:
             EXCLUDE = f.read().split()
+    # still never add the .dotexclude file to $HOME
     EXCLUDE.append(dotexclude)
 
-    print "EXCLUDE:", EXCLUDE
-    print args
-
-    # add option: operatate from any directory
-    # maybe no flags = current dir
     # get files not in exclude list
-    files = [f for f in os.listdir(".") if f not in EXCLUDE]
+    git_dir = "."
+    if len(args) == 1 and os.path.exists(args[0]):
+        git_dir = args[0]
+    elif not os.path.exists(args[0]):
+        print "That directory doesnot exist"
+        print "Use the current working directory? (y/N)"
+        if raw_input("> ").lower() != "y":
+            print "Now exiting"
+            return
+
+    files = [f for f in os.listdir(git_dir) if f not in EXCLUDE]
 
     # by default place dotfiles in your $HOME
     for f in files:

@@ -11,19 +11,16 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    # add option: add files for exlusion
-    # don't symlink these, because they are not your dotfiles (I hope)
-    EXCLUDE = ["LICENSE", ".git", ".gitignore", "README.md"]
-
     # option for custom dotexclude file
     dotexclude = ".dotexclude"
     if options.dot_exclude:
         dotexclude = options.dot_exclude
 
     # prepare list of files not to link to $HOME
+    EXCLUDE = []
     if os.path.exists(dotexclude):
         with open(dotexclude) as f:
-            EXCLUDE += f.read().split()
+            EXCLUDE = f.read().split()
     EXCLUDE.append(dotexclude)
 
     print "EXCLUDE:", EXCLUDE

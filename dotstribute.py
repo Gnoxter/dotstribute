@@ -5,9 +5,9 @@ from optparse import OptionParser
 def main():
     parser = OptionParser()
     parser.add_option("-d", "--dotexe", dest = "dot_exclude",
-            help = "Exlucde files, given by .dotexclude file")
+            help = "Exclude files, given by .dotexclude file")
     parser.add_option("-f", "--force", dest = "force", default = False,
-            action = "store_true", help = "Force overwrite the previus links")
+            action = "store_true", help = "Force override the previous links")
 
     (options, args) = parser.parse_args()
 
